@@ -44,18 +44,17 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    store.fetchDates("5f245dd64d732d001768a9c5");
+    store.fetchRegions();
     print(store.dates);
     return Container(child: Observer(builder: (_) {
-      print(store.fetchDatesFuture.status);
-      return store.fetchDatesFuture.status == FutureStatus.fulfilled
+      return store.fetchRegionsFuture.status == FutureStatus.fulfilled
           ? ListView.builder(
-              itemCount: store.dates.length,
+              itemCount: store.regions.length,
               itemBuilder: (BuildContext _, int index) {
                 return ListTile(
-                  title: Text(store.dates[index].type.type),
+                  title: Text(store.regions[index].regionName),
                   subtitle: Text(
-                    store.dates[index].formattedDate,
+                    store.regions[index].postalCode,
                   ),
                 );
               },

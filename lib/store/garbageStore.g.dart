@@ -24,6 +24,22 @@ mixin _$GarbageStore on _GarbageStore, Store {
     });
   }
 
+  final _$fetchRegionsFutureAtom =
+      Atom(name: '_GarbageStore.fetchRegionsFuture');
+
+  @override
+  ObservableFuture<List<GarbageRegion>> get fetchRegionsFuture {
+    _$fetchRegionsFutureAtom.reportRead();
+    return super.fetchRegionsFuture;
+  }
+
+  @override
+  set fetchRegionsFuture(ObservableFuture<List<GarbageRegion>> value) {
+    _$fetchRegionsFutureAtom.reportWrite(value, super.fetchRegionsFuture, () {
+      super.fetchRegionsFuture = value;
+    });
+  }
+
   final _$fetchDatesAsyncAction = AsyncAction('_GarbageStore.fetchDates');
 
   @override
@@ -31,10 +47,18 @@ mixin _$GarbageStore on _GarbageStore, Store {
     return _$fetchDatesAsyncAction.run(() => super.fetchDates(id));
   }
 
+  final _$fetchRegionsAsyncAction = AsyncAction('_GarbageStore.fetchRegions');
+
+  @override
+  Future<List<GarbageRegion>> fetchRegions() {
+    return _$fetchRegionsAsyncAction.run(() => super.fetchRegions());
+  }
+
   @override
   String toString() {
     return '''
-fetchDatesFuture: ${fetchDatesFuture}
+fetchDatesFuture: ${fetchDatesFuture},
+fetchRegionsFuture: ${fetchRegionsFuture}
     ''';
   }
 }
