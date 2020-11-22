@@ -1,10 +1,3 @@
-# kiedy_smieci_app
+### Kiedy Śmieci App
 
-A new Flutter project.
-
-## Getting Started
-
-- mobx
-- build-runner
-- http
-
+An application to serve information from KiedyŚmieciApi Server

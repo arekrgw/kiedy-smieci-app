@@ -1,65 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
+import 'package:kiedy_smieci_app/screens/dates.dart';
+import 'package:provider/provider.dart';
 import './store/garbageStore.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+import './screens/home.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      Provider(create: (_) => GarbageStore()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("KiedyŚmieci"),
-        ),
-        body: Home(),
-      ),
+      title: 'Kiedy Śmieci',
+      initialRoute: Home.routeName,
+      routes: {
+        Home.routeName: (context) => Home(),
+        DatesScreen.routeName: (context) => DatesScreen(),
+      },
     );
-  }
-}
-
-class Home extends StatelessWidget {
-  final store = GarbageStore();
-
-  @override
-  Widget build(BuildContext context) {
-    store.fetchRegions();
-    print(store.dates);
-    return Container(child: Observer(builder: (_) {
-      return store.fetchRegionsFuture.status == FutureStatus.fulfilled
-          ? ListView.builder(
-              itemCount: store.regions.length,
-              itemBuilder: (BuildContext _, int index) {
-                return ListTile(
-                  title: Text(store.regions[index].regionName),
-                  subtitle: Text(
-                    store.regions[index].postalCode,
-                  ),
-                );
-              },
-            )
-          : CircularProgressIndicator();
-    }));
   }
 }
