@@ -9,6 +9,22 @@ part of 'garbageStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$GarbageStore on _GarbageStore, Store {
+  Computed<List<GarbageDateAggregated>> _$aggregatedDatesComputed;
+
+  @override
+  List<GarbageDateAggregated> get aggregatedDates =>
+      (_$aggregatedDatesComputed ??= Computed<List<GarbageDateAggregated>>(
+              () => super.aggregatedDates,
+              name: '_GarbageStore.aggregatedDates'))
+          .value;
+  Computed<int> _$closestDateComputed;
+
+  @override
+  int get closestDate =>
+      (_$closestDateComputed ??= Computed<int>(() => super.closestDate,
+              name: '_GarbageStore.closestDate'))
+          .value;
+
   final _$fetchDatesFutureAtom = Atom(name: '_GarbageStore.fetchDatesFuture');
 
   @override
@@ -58,7 +74,9 @@ mixin _$GarbageStore on _GarbageStore, Store {
   String toString() {
     return '''
 fetchDatesFuture: ${fetchDatesFuture},
-fetchRegionsFuture: ${fetchRegionsFuture}
+fetchRegionsFuture: ${fetchRegionsFuture},
+aggregatedDates: ${aggregatedDates},
+closestDate: ${closestDate}
     ''';
   }
 }

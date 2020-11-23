@@ -1,3 +1,4 @@
+import 'package:kiedy_smieci_app/models/garbageDateAggreagated.dart';
 import 'package:kiedy_smieci_app/models/garbageRegion.dart';
 import 'package:mobx/mobx.dart';
 import '../models/garbageDate.dart';
@@ -19,8 +20,37 @@ abstract class _GarbageStore with Store {
     dates = [];
     final future = GarbageServer.getDates(id);
     fetchDatesFuture = ObservableFuture(future);
+    dates = await fetchDatesFuture;
+    dates.sort((a, b) => a.date.compareTo(b.date));
 
-    return dates = await fetchDatesFuture;
+    return dates;
+  }
+
+  @computed
+  List<GarbageDateAggregated> get aggregatedDates {
+    List<GarbageDateAggregated> aggDates = [];
+    DateTime current;
+    int aggIndex = -1;
+    for(int i = 0; i<dates.length; ++i) {
+      if(current != dates[i].date) {
+        aggDates.add(GarbageDateAggregated(date: dates[i].date, region: dates[i].region));
+        current = dates[i].date;
+        aggIndex++;
+      }
+      aggDates[aggIndex].types.add(dates[i].type);
+    }
+
+    return aggDates;
+  }
+
+  @computed
+  int get closestDate {
+    for(int i = 0; i<aggregatedDates.length; ++i) {
+      if(aggregatedDates[i].date.isAfter(DateTime.now())){
+        return i;
+      }
+    }
+    return 0;
   }
 
   @observable

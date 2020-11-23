@@ -4,6 +4,7 @@ import 'package:kiedy_smieci_app/store/garbageStore.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DatesScreen extends StatelessWidget {
   static final String routeName = '/dates';
@@ -25,18 +26,20 @@ class DatesScreen extends StatelessWidget {
         child: Observer(
           builder: (_) {
             return store.fetchDatesFuture.status == FutureStatus.fulfilled
-                ? ListView.builder(
-                    itemCount: store.dates.length,
+                ? ScrollablePositionedList.builder(
+                    itemCount: store.aggregatedDates.length,
                     itemBuilder: (BuildContext _, int index) {
                       return ListTile(
-                        title: Text(store.dates[index].type.type),
-                        subtitle: Text(
-                          store.dates[index].formattedDate,
-                        ),
+                        title: Text(store.aggregatedDates[index].formattedDate),
+                        subtitle:
+                            Text(store.aggregatedDates[index].listedTypes),
                       );
                     },
+                    initialScrollIndex: store.closestDate,
                   )
-                : CircularProgressIndicator();
+                : Center(
+                    child: CircularProgressIndicator(),
+                  );
           },
         ),
       ),
