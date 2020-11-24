@@ -12,7 +12,7 @@ class GarbageStore = _GarbageStore with _$GarbageStore;
 abstract class _GarbageStore with Store {
   List<GarbageDate> rawDates = [];
   @observable
-  List<GarbageRegion> regions = [];
+  ObservableList<GarbageRegion> regions = ObservableList.of([]);
   List<GarbageDateAggregated> aggregatedDates = [];
 
   @observable
@@ -56,25 +56,25 @@ abstract class _GarbageStore with Store {
       ObservableFuture.value([]);
 
   @action
-  Future<List<GarbageRegion>> fetchRegions() async {
-    regions = [];
+  Future<ObservableList<GarbageRegion>> fetchRegions() async {
+    regions = ObservableList.of([]);
     final future = GarbageServer.getRegions();
     fetchRegionsFuture = ObservableFuture(future);
     List<GarbageRegion> tempRegions = await fetchRegionsFuture;
 
     List<String> favouriteRegionsIds =
         await GarbageLocalStorage.getFavourites();
-        print(favouriteRegionsIds);
     for (var region in tempRegions) {
       if (favouriteRegionsIds.contains(region.id)) region.favourite = true;
     }
 
-    return regions = tempRegions;
+    regions = ObservableList.of(tempRegions);
+    return regions;
   }
 
   @action
   void updateRegionFavourite(GarbageRegion region) {
     region.toggleFavourites();
-    regions = [...regions];
+    regions = ObservableList.of([...regions]);
   }
 }

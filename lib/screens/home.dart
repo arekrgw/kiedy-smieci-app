@@ -19,7 +19,8 @@ class Home extends StatelessWidget {
       body: Container(
         child: Observer(
           builder: (_) {
-            return store.fetchRegionsFuture.status == FutureStatus.fulfilled
+            return (store.fetchRegionsFuture.status == FutureStatus.fulfilled &&
+                    store.regions.length != 0)
                 ? ListView.builder(
                     itemCount: store.regions.length,
                     itemBuilder: (BuildContext _, int index) {
@@ -30,7 +31,8 @@ class Home extends StatelessWidget {
                           arguments: store.regions[index],
                         ),
                         trailing: GestureDetector(
-                          onTap: () => store.updateRegionFavourite(store.regions[index]),
+                          onTap: () =>
+                              store.updateRegionFavourite(store.regions[index]),
                           child: store.regions[index].favourite
                               ? Icon(
                                   Icons.favorite,

@@ -1,5 +1,5 @@
 import 'package:kiedy_smieci_app/models/garbageCity.dart';
-import 'package:kiedy_smieci_app/api/sharedPreferences.dart';
+import 'package:kiedy_smieci_app/api/garbageLocalStorage.dart';
 
 class GarbageRegion {
   final String id;

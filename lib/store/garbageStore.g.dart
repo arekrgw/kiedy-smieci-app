@@ -20,13 +20,13 @@ mixin _$GarbageStore on _GarbageStore, Store {
   final _$regionsAtom = Atom(name: '_GarbageStore.regions');
 
   @override
-  List<GarbageRegion> get regions {
+  ObservableList<GarbageRegion> get regions {
     _$regionsAtom.reportRead();
     return super.regions;
   }
 
   @override
-  set regions(List<GarbageRegion> value) {
+  set regions(ObservableList<GarbageRegion> value) {
     _$regionsAtom.reportWrite(value, super.regions, () {
       super.regions = value;
     });
@@ -73,7 +73,7 @@ mixin _$GarbageStore on _GarbageStore, Store {
   final _$fetchRegionsAsyncAction = AsyncAction('_GarbageStore.fetchRegions');
 
   @override
-  Future<List<GarbageRegion>> fetchRegions() {
+  Future<ObservableList<GarbageRegion>> fetchRegions() {
     return _$fetchRegionsAsyncAction.run(() => super.fetchRegions());
   }
 
