@@ -26,6 +26,7 @@ abstract class _GarbageStore with Store {
     fetchDatesFuture = ObservableFuture(future);
     rawDates = await fetchDatesFuture;
     rawDates.sort((a, b) => a.date.compareTo(b.date));
+    aggregatedDates = [];
 
     DateTime current;
     int aggIndex = -1;
