@@ -29,6 +29,15 @@ class Home extends StatelessWidget {
                           DatesScreen.routeName,
                           arguments: store.regions[index],
                         ),
+                        trailing: GestureDetector(
+                          onTap: () => store.updateRegionFavourite(store.regions[index]),
+                          child: store.regions[index].favourite
+                              ? Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                )
+                              : Icon(Icons.favorite_border),
+                        ),
                         title: Text(store.regions[index].regionName),
                         subtitle: Text(
                           store.regions[index].postalCode,

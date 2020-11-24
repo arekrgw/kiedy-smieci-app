@@ -9,14 +9,6 @@ part of 'garbageStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$GarbageStore on _GarbageStore, Store {
-  Computed<List<GarbageDateAggregated>> _$aggregatedDatesComputed;
-
-  @override
-  List<GarbageDateAggregated> get aggregatedDates =>
-      (_$aggregatedDatesComputed ??= Computed<List<GarbageDateAggregated>>(
-              () => super.aggregatedDates,
-              name: '_GarbageStore.aggregatedDates'))
-          .value;
   Computed<int> _$closestDateComputed;
 
   @override
@@ -24,6 +16,21 @@ mixin _$GarbageStore on _GarbageStore, Store {
       (_$closestDateComputed ??= Computed<int>(() => super.closestDate,
               name: '_GarbageStore.closestDate'))
           .value;
+
+  final _$regionsAtom = Atom(name: '_GarbageStore.regions');
+
+  @override
+  List<GarbageRegion> get regions {
+    _$regionsAtom.reportRead();
+    return super.regions;
+  }
+
+  @override
+  set regions(List<GarbageRegion> value) {
+    _$regionsAtom.reportWrite(value, super.regions, () {
+      super.regions = value;
+    });
+  }
 
   final _$fetchDatesFutureAtom = Atom(name: '_GarbageStore.fetchDatesFuture');
 
@@ -59,7 +66,7 @@ mixin _$GarbageStore on _GarbageStore, Store {
   final _$fetchDatesAsyncAction = AsyncAction('_GarbageStore.fetchDates');
 
   @override
-  Future<List<GarbageDate>> fetchDates(String id) {
+  Future<List<GarbageDateAggregated>> fetchDates(String id) {
     return _$fetchDatesAsyncAction.run(() => super.fetchDates(id));
   }
 
@@ -70,12 +77,26 @@ mixin _$GarbageStore on _GarbageStore, Store {
     return _$fetchRegionsAsyncAction.run(() => super.fetchRegions());
   }
 
+  final _$_GarbageStoreActionController =
+      ActionController(name: '_GarbageStore');
+
+  @override
+  void updateRegionFavourite(GarbageRegion region) {
+    final _$actionInfo = _$_GarbageStoreActionController.startAction(
+        name: '_GarbageStore.updateRegionFavourite');
+    try {
+      return super.updateRegionFavourite(region);
+    } finally {
+      _$_GarbageStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
+regions: ${regions},
 fetchDatesFuture: ${fetchDatesFuture},
 fetchRegionsFuture: ${fetchRegionsFuture},
-aggregatedDates: ${aggregatedDates},
 closestDate: ${closestDate}
     ''';
   }
